@@ -1,0 +1,8 @@
+# these files differ from user to user depending on machine and enviroments
+
+outputs
+config.py
+# compiled code strictly differs from machine to machine depending on the version etc
+__pycache__ 
+# for mac machines metadata remembers customizations made
+.DS_Store
