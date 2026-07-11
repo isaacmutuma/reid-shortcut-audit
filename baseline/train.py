@@ -1,11 +1,10 @@
-from pickle import TRUE
 import config
 import os
 import sys
-import torchreid
-from torchreid.utils.data import ImageDataManager
-from torchreid.data import Market1501
-from ..dataset import ImageDataset
+import torch
+from torchreid.data import ImageDataManager
+from torchreid.models import resnet50
+
 
 
 
@@ -17,15 +16,25 @@ else:
 
 
 # check whether the output path exists
-if os.path.exists(config.OUTPUT_DIR):
+if not os.path.exists(config.OUTPUT_DIR):
+	os.makedirs(config.OUTPUT_DIR,exist_ok=True)
 	print('OUTPUT_DIR created')
 else:
-	os.makedirs(config.OUTPUT_DIR,exist_ok=True)
+	print('OUTPUT_DIR found ')
+	
 
-# load dataset - triggers the __init__ funtion to run ans pass three tuples to the superclass
-dataset = Market1501(root=config.DATASET_ROOT)
 
-# dataloader
+"""ImageDataManager
+  → calls init_image_dataset('market1501')
+    → looks up registry
+      → finds Market1501 class
+        → instantiates Market1501(root=...)
+          → __init__ runs
+            → process_dir runs x3
+              → three tuple lists built
+                → passed to super().__init__()"""
+# The manager then  wraps the tuples from the dataset object in dataloaders
+# transforms and images ready to be passed it to network 
 datamanager = ImageDataManager(
     root=config.DATASET_ROOT,
     sources='market1501',
@@ -40,4 +49,15 @@ datamanager = ImageDataManager(
     workers=4,
     use_gpu=True
 )
+# the model instance passed to the source code
+''' _num_train_pids    ← discovered and stored internally
+    num_train_pids   ← property that exposes it externally'''
+model = resnet50(
+        num_classes=datamanager.num_train_pids, # internal access soley for datamanager to accees this data on unique training data 
+        loss='softmax_triplet',
+		pretrained = True     
+    )
 
+# move the model to device
+device = torch.device(config.DEVICE) # the actual hardware object that pytorch understands torch.device()
+model=model.to(device)
