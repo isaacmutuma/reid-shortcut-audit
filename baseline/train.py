@@ -3,10 +3,9 @@ import os
 import sys
 import torch
 from torchreid.data import ImageDataManager
-from torchreid.models import resnet50
-
-
-
+from torchreid.models import build_model
+from torchreid.optim import build_optimizer
+from torchreid.engine import ImageTripletEngine
 
 # check whether the file path exists and is accurate
 if os.path.exists(config.DATASET_ROOT):
@@ -22,7 +21,6 @@ if not os.path.exists(config.OUTPUT_DIR):
 else:
 	print('OUTPUT_DIR found ')
 	
-
 
 """ImageDataManager
   → calls init_image_dataset('market1501')
@@ -52,12 +50,42 @@ datamanager = ImageDataManager(
 # the model instance passed to the source code
 ''' _num_train_pids    ← discovered and stored internally
     num_train_pids   ← property that exposes it externally'''
-model = resnet50(
-        num_classes=datamanager.num_train_pids, # internal access soley for datamanager to accees this data on unique training data 
-        loss='softmax_triplet',
-		pretrained = True     
+model = build_model(
+   name=config.MODEL,
+   num_classes=datamanager.num_train_pids, # internal access soley for datamanager to accees this data on unique training data 
+   loss='softmax_triplet',
+	 pretrained = True,
+   use_gpu=True    
     )
 
 # move the model to device
 device = torch.device(config.DEVICE) # the actual hardware object that pytorch understands torch.device()
 model=model.to(device)
+
+#optimizer 
+optimizer = build_optimizer(
+   model,
+   optim='adam',
+   lr=config.LR
+)
+
+#dual loss architecture using the triplet engine
+engine =ImageTripletEngine(
+  datamanager,
+  model,
+  optimizer,
+  use_gpu=True,
+)
+# running the engine just needs to know where to save results how long to train and how frequent to evaluate
+engine.run (
+  save_dir=config.OUTPUT_DIR,
+  max_epoch=config.EPOCH,
+  eval_freq = 5
+  )
+
+
+         
+
+      
+
+
