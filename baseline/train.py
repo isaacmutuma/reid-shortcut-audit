@@ -5,10 +5,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 #sys path runs before any import that depends on it
 import config
 import torch
-from torchreid.data import ImageDataManager
-from torchreid.models import build_model
-from torchreid.optim import build_optimizer
-from torchreid.engine import ImageTripletEngine
+from torchreid.reid.data import ImageDataManager
+from torchreid.reid.models import build_model
+from torchreid.reid.optim import build_optimizer
+from torchreid.reid.engine import ImageTripletEngine
 
 # check whether the file path exists and is accurate
 if os.path.exists(config.DATASET_ROOT):
