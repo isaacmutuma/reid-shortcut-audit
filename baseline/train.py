@@ -1,13 +1,14 @@
-import config
+import sys
 import os
+# import file finder for folders that exist outside this folder ex./content/reid-shortcut-audit',
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+#sys path runs before any import that depends on it
+import config
 import torch
 from torchreid.data import ImageDataManager
 from torchreid.models import build_model
 from torchreid.optim import build_optimizer
 from torchreid.engine import ImageTripletEngine
-import sys
-# import file finder for folders that exist outside this folder ex./content/reid-shortcut-audit',
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # check whether the file path exists and is accurate
 if os.path.exists(config.DATASET_ROOT):
