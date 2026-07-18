@@ -35,7 +35,7 @@ else:
               → three tuple lists built
                 → passed to super().__init__()"""
 # The manager then  wraps the tuples from the dataset object in dataloaders
-# transforms and images ready to be passed it to network 
+# transforms the images ready to be passed it to network via the engine
 datamanager = ImageDataManager(
     root=config.DATASET_ROOT,
     sources='market1501',
@@ -47,7 +47,7 @@ datamanager = ImageDataManager(
     norm_std=[0.229, 0.224, 0.225],
     batch_size_train=config.BATCH_SIZE,
     batch_size_test=config.BATCH_SIZE,
-    workers=4,
+    workers=2,
     use_gpu=True
 )
 # the model instance passed to the source code
@@ -56,7 +56,7 @@ datamanager = ImageDataManager(
 model = build_model(
    name=config.MODEL,
    num_classes=datamanager.num_train_pids, # internal access soley for datamanager to accees this data on unique training data 
-   loss='softmax_triplet',
+   loss='triplet', # outputs, features = self.model(imgs)
 	 pretrained = True,
    use_gpu=True    
     )
@@ -84,7 +84,7 @@ engine.run (
   save_dir=config.OUTPUT_DIR,
   max_epoch=config.EPOCH,
   eval_freq = 5
-  )
+)
 
 
          
