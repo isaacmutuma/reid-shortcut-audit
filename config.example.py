@@ -6,4 +6,7 @@ DATASET_ROOT="" # eg./root/.cache/kagglehub/datasets/pengcw1/market-1501/version
                 # eg./Users/yourname/projects/reid-shortcut-audit/data (local)
 OUTPUT_DIR=""   # save the progress made during training either in outputs file on collab or local machine
 BATCH_SIZE= 32  #reduce if you run out of GPU memory
-DEVICE=""    #'cuda' on Colab, 'cpu' or 'mps' on Mac
+DEVICE= ""    #'cuda' on Colab, 'cpu' or 'mps' on Mac
+LR = 0.0003
+EPOCH= 60
+MODEL='resnet50'
