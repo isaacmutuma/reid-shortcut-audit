@@ -83,7 +83,7 @@ engine =ImageTripletEngine(
 engine.run (
   save_dir=config.OUTPUT_DIR,
   max_epoch=config.EPOCH,
-  eval_freq = 1
+  eval_freq = 60
 )
 
 
