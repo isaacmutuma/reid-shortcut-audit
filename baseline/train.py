@@ -9,7 +9,7 @@ from torchreid.reid.data import ImageDataManager
 from torchreid.reid.models import build_model
 from torchreid.reid.optim import build_optimizer
 from torchreid.reid.engine import ImageTripletEngine
-
+from torchreid.reid.optim import build_lr_scheduler
 # check whether the file path exists and is accurate
 if os.path.exists(config.DATASET_ROOT):
 	print('Path to Dataset is found')
@@ -72,11 +72,20 @@ optimizer = build_optimizer(
    lr=config.LR
 )
 
+scheduler=build_lr_scheduler(
+  optimizer,
+  lr_scheduler='single_step',
+  stepsize=20,
+  gamma=0.1,
+  max_epoch=1
+)
+
 #dual loss architecture using the triplet engine
 engine =ImageTripletEngine(
   datamanager,
   model,
   optimizer,
+  scheduler,
   use_gpu=True,
 )
 # running the engine just needs to know where to save results how long to train and how frequent to evaluate
