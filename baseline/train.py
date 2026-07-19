@@ -85,7 +85,7 @@ engine =ImageTripletEngine(
   datamanager,
   model,
   optimizer,
-  scheduler,
+  scheduler=scheduler,
   use_gpu=True,
 )
 # running the engine just needs to know where to save results how long to train and how frequent to evaluate
