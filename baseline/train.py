@@ -95,6 +95,13 @@ engine.run (
   eval_freq = 60
 )
 
+# immediately copy checkpoint after training
+import shutil
+checkpoint_src = config.OUTPUT_DIR + '/model/model.pth.tar-60'
+checkpoint_dst = '/kaggle/working/model.pth.tar-60'
+shutil.copy(checkpoint_src, checkpoint_dst)
+print("Checkpoint backed up to:", checkpoint_dst)
+
 
          
 
