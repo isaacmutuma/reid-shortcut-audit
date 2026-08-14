@@ -10,3 +10,4 @@ DEVICE= ""    #'cuda' on Colab, 'cpu' or 'mps' on Mac
 LR = 0.0003
 EPOCH= 60
 MODEL='resnet50'
+CHECKPOINT_PATH = ''  # path to model.pth.tar-60

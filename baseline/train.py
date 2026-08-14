@@ -18,7 +18,7 @@ else:
 
 
 # check whether the output path exists
-if not os.path.exists(config.OUTPUT_DIR):
+if os.path.exists(config.OUTPUT_DIR):
 	os.makedirs(config.OUTPUT_DIR,exist_ok=True)
 	print('OUTPUT_DIR created')
 else:
@@ -71,7 +71,7 @@ optimizer = build_optimizer(
    optim='adam',
    lr=config.LR
 )
-
+# to adjust the learning rates in the training process
 scheduler=build_lr_scheduler(
   optimizer,
   lr_scheduler='single_step',
