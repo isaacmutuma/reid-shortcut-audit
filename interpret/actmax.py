@@ -89,7 +89,7 @@ for layer,channels in layers_and_channels.items():
 		result_img = maximize_channel(model, layer, channel) 
 		# tensor (1, 3, 256, 128) → numpy (256, 128, 3)
 		img = result_img.squeeze(0) # remove batch dim → (3, 256, 128)
-		img = img.permute(1, 2, 0).numpy()  # → (256, 128, 3)
+		img = img.permute(1, 2, 0).cpu().numpy()  # → (256, 128, 3)
 		img = (img - img.min()) / (img.max() - img.min()) * 255  # normalize to 0-255
 		img = img.astype(np.uint8)   # convert to uint8
 
