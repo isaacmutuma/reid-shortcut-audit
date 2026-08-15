@@ -35,7 +35,7 @@ device=torch.device(config.DEVICE)
 model=model.to(device)
 
 #load the checkpoint
-checkpoint=torch.load(config.CHECKPOINT_PATH,map_location=device)
+checkpoint=torch.load(config.CHECKPOINT_PATH,map_location=device,weights_only=False)
 # EXtract only the layer weights dictionary ignoring the 'optimizer', 'scheduler', 'epoch', 'rank1'
 model.load_state_dict(checkpoint['state_dict'])
 model.eval()
@@ -92,7 +92,7 @@ for layer,channels in layers_and_channels.items():
 		img = img.permute(1, 2, 0).numpy()  # → (256, 128, 3)
 		img = (img - img.min()) / (img.max() - img.min()) * 255  # normalize to 0-255
 		img = img.astype(np.uint8)   # convert to uint8
-		
+
 		filename = f"{config.OUTPUT_DIR}/actmax/{layer}_channel{channel}.png"
 		os.makedirs(f"{config.OUTPUT_DIR}/actmax", exist_ok=True)
 		cv2.imwrite(filename, img)

@@ -59,7 +59,7 @@ device=torch.device(config.DEVICE)
 model=model.to(device)
 
 #load the checkpoint
-checkpoint=torch.load(config.CHECKPOINT_PATH,map_location=device)
+checkpoint=torch.load(config.CHECKPOINT_PATH,map_location=device,weights_only=False)
 # EXtract only the layer weights dictionary ignoring the 'optimizer', 'scheduler', 'epoch', 'rank1'
 model.load_state_dict(checkpoint['state_dict'])
 model.eval()
@@ -113,7 +113,7 @@ for batch in datamanager.train_loader: #dataloader implements __iter__ and __nex
 
 
 print("\n=== Linear Probe Results ===")
-
+# What information is setting in the internal layers?
 
 for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
     paths_list=list(vectors[layer].keys()) # gets all the paths that anchor everything
@@ -148,6 +148,8 @@ for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
     print(f"{layer} pid probe: {pid_accuracy:.3f}")
 
     print(f"{layer} | color: {color_accuracy:.3f} | identity: {pid_accuracy:.3f}")
+
+
 
 
 
