@@ -1,7 +1,6 @@
 import os
 import cv2
 import numpy as np
-train_dir = os.path.join(config.DATASET_ROOT, 'market1501', 'Market-1501-v15.09.15', 'bounding_box_train')
 
 '''     This file given the training directory,
         load each image with OpenCV,
