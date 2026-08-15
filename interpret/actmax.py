@@ -57,7 +57,7 @@ def maximize_channel(model, layer_name, channel_idx, num_steps=200, lr=0.1):
 	hook = getattr(model, layer_name).register_forward_hook(hook_fn)
 
     # start from random noise — shape (1, 3, 256, 128) requires_grad=True on the image
-	input_img = torch.randn(1, 3, 256, 128, requires_grad=True)
+	input_img = torch.randn(1, 3, 256, 128).to(device).requires_grad_(True)
 	#optimizer
 	optimizer = torch.optim.Adam([input_img], lr=lr)
     # forward pass up to target layer
