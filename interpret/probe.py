@@ -142,7 +142,7 @@ for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
 
     if layer == 'layer4':
         channel_importance = np.abs(clf.coef_).max(axis=0)
-        top_channels = top_channels[-10:]  # take only top 10 instead of all 50
+        top_channels = np.argsort(channel_importance)[-10:]
         top_channels_path = os.path.join(config.OUTPUT_DIR, 'top_channels.npy')
         os.makedirs(config.OUTPUT_DIR, exist_ok=True)
         np.save(top_channels_path, top_channels)
