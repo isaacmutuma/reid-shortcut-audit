@@ -134,6 +134,20 @@ for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
 
     print(f"{layer} color probe: {color_accuracy:.3f}")
 
+    '''
+    On layer 4 's the (12936,2048) achieved a 92.9%  color accuracy 
+    We now look into the weights assigned to the image dimensions for predicting color
+    We save the color-heavy channels for further investigation in ablate.py
+    '''
+
+    if layer == 'layer4':
+        channel_importance = np.abs(clf.coef_).max(axis=0)
+        top_channels = np.argsort(channel_importance)[-50:]
+        top_channels_path = os.path.join(config.OUTPUT_DIR, 'top_channels.npy')
+        np.save(top_channels_path, top_channels)
+        print(f"Top channels saved: {top_channels}")
+
+
     # pid prob data split
     X_train,X_test,y_train,y_test=train_test_split(X, y_pid, test_size=0.2, random_state=42)
     # instantiate model
@@ -149,9 +163,4 @@ for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
 
     print(f"{layer} | color: {color_accuracy:.3f} | identity: {pid_accuracy:.3f}")
 
-
-
-
-
     
-

@@ -35,3 +35,4 @@
 layer4 embeddings — the same embeddings used for re-ID matching. Color is a 
 primary linearly separable feature in the model's final representation across 
 all four layers. This is consistent with shortcut learning.
+
