@@ -140,7 +140,7 @@ for layer in  ['layer1', 'layer2', 'layer3', 'layer4']:
     We save the color-heavy channels for further investigation in ablate.py
     '''
 
-    if layer == 'layer4':
+    if layer == 'layer1':
         channel_importance = np.abs(clf.coef_).max(axis=0)
         top_channels = np.argsort(channel_importance)[-10:]
         top_channels_path = os.path.join(config.OUTPUT_DIR, 'top_channels.npy')
