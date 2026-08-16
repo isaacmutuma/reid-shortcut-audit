@@ -20,3 +20,18 @@
 - Rank-10: 95.0%
 - Rank-20: 97.1%
 - Model: ResNet50, Market-1501, 60 epochs, triplet loss + softmax
+
+
+## Phase 2 — Linear Probe Results
+
+| Layer  | Color Accuracy | Identity Accuracy |
+|--------|---------------|-------------------|
+| layer1 | 90.4%         | 7.1%              |
+| layer2 | 91.5%         | 10.1%             |
+| layer3 | 92.7%         | 17.9%             |
+| layer4 | 92.9%         | 100.0%            |
+
+**Finding:** A linear classifier achieves 92.9% clothing color accuracy on 
+layer4 embeddings — the same embeddings used for re-ID matching. Color is a 
+primary linearly separable feature in the model's final representation across 
+all four layers. This is consistent with shortcut learning.
