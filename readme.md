@@ -36,3 +36,18 @@ layer4 embeddings — the same embeddings used for re-ID matching. Color is a
 primary linearly separable feature in the model's final representation across 
 all four layers. This is consistent with shortcut learning.
 
+
+## Phase 3 — Causal Ablation Results
+
+### Layer4 Top 50 Channels Ablated
+| Metric | Baseline | Ablated | Change |
+|--------|----------|---------|--------|
+| mAP    | 65.3%    | 66.5%   | +1.2%  |
+| Rank-1 | 82.8%    | 83.4%   | +0.6%  |
+
+**Finding:** Zeroing the 50 most color-predictive channels in layer4 
+*improved* re-ID accuracy slightly. This suggests those channels were 
+carrying color as noise that actively hurt matching performance — 
+removing them forced the model to rely on more genuine identity features.
+Next: ablate top 10 channels to test whether a smaller intervention 
+produces a cleaner causal signal.
