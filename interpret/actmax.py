@@ -51,7 +51,7 @@ def maximize_channel(model, layer_name, channel_idx, num_steps=200, lr=0.1):
 	captured = {}
 
 	def hook_fn(module, input, output): #incoming feature map is  multiplied by Filter 214's weights to generate Filter 214's output activation values.
-		captured['activation'] = output
+		captured['activation'] = output # activation tesnor (batch,2048,7,7)
 
 	# for given model layer whenever model(input_img)runs, and gets to that layer hook_fn is called
 	hook = getattr(model, layer_name).register_forward_hook(hook_fn)

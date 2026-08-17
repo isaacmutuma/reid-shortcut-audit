@@ -101,7 +101,7 @@ engine =ImageTripletEngine(
 )
 
 print("=== Ablation Evaluation ===")
-print(f"Zeroing top 50 color-predictive channels in layer4")
+print(f"Zeroing top 10 color-predictive channels in layer4")
 print(f"Baseline: mAP 65.3%, Rank-1 82.8%")
 print(f"Running evaluation...")
 

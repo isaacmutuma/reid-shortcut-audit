@@ -50,4 +50,16 @@ all four layers. This is consistent with shortcut learning.
 carrying color as noise that actively hurt matching performance — 
 removing them forced the model to rely on more genuine identity features.
 Next: ablate top 10 channels to test whether a smaller intervention 
-produces a cleaner causal signal.
+produces a cleaner causal signal
+
+### Ablation Summary
+| Intervention          | mAP   | Rank-1 |
+|-----------------------|-------|--------|
+| Baseline              | 65.3% | 82.8%  |
+| Layer4 top 50 zeroed  | 66.5% | 83.4%  |
+| Layer4 top 10 zeroed  | 66.5% | 83.3%  |
+| Layer1 top 10 zeroed  | 66.5% | 83.4%  |
+
+**Finding:** Color acts as distributed noise across all network layers. 
+Removing color-predictive channels improves accuracy consistently 
+regardless of intervention depth or size.
