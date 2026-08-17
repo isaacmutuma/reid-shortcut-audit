@@ -49,7 +49,7 @@ class ColorShiftDataset(Dataset):
 
 	def __getitem__(self, index):
 		# unpacks a query images data
-		img_path, pid, camid = self.query_data[index]
+		img_path, pid, camid, dsetid = self.query_data[index]
 		# load image
 		orig_img = cv2.imread(img_path)
 		if orig_img is None:
