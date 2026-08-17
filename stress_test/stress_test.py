@@ -79,7 +79,12 @@ class ColorShiftDataset(Dataset):
 			img_tensor = torch.from_numpy(img).permute(2, 0, 1).float() / 255.0
 
 
-		return (img_tensor, pid, camid, img_path)
+		return {
+					'img':    img_tensor,
+					'pid':    pid,
+					'camid':  camid,
+					'impath': img_path
+				}
 
 
 # check whether the file path exists and is accurate
