@@ -164,7 +164,7 @@ query_data = datamanager.test_dataset['market1501']['query']
 
 dataset = ColorShiftDataset(
     query_data=query_data,
-    hue_shift=180,
+    hue_shift=30,
     transform=datamanager.transform_te
 )
 
@@ -178,7 +178,7 @@ recolored_loader = DataLoader(
 # swap query loader and evaluate
 engine.test_loader['market1501']['query'] = recolored_loader
 
-print("=== Stress Test: Hue Shift 180 degrees ===")
+print("=== Stress Test: Hue Shift 30 degrees ===")
 print("Baseline: mAP 65.3%, Rank-1 82.8%")
 engine.test(save_dir=config.OUTPUT_DIR)
 
