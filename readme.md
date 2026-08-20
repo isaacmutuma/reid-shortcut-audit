@@ -1,5 +1,9 @@
 # Diagnosing and Repairing Shortcut Learning in Person Re-Identification Models for Robotic Perception
 
+While building a person-tracking system at IDOLL Robotics, a companion robot startup, I noticed the model's matching accuracy collapsed when subjects changed clothes between camera views. Investigating why led to this project — a full mechanistic audit of what the model had actually learned. The answer: it was tracking shirts, not people.
+
+The fix generalizes far beyond robotics. The same shortcut problem appears in any re-ID system deployed where appearance is inconsistent — and nowhere is that more critical than wildlife monitoring. Large conservation parks across Africa need autonomous systems that can track individual animals across days, seasons, and terrain. An animal's coat doesn't change, but lighting does — dramatically. A model that shortcuts on color temperature or shadow pattern will fail in the field the same way this one fails under a hue shift. Building re-ID systems that track identity, not appearance artifacts, is the foundation that makes that possible.
+
 A six-phase mechanistic audit of shortcut learning in a standard ResNet50 re-ID baseline trained on Market-1501.
 The project diagnoses color as a primary shortcut feature, quantifies its severity, and repairs it through targeted augmentation.
 
