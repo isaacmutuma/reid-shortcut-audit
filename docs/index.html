@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reid Shortcut Audit — Isaac Mutuma</title>
+<link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --text-accent: #185fa5;
+  --text-success: #3b6d11;
+  --surface-0: #f1f0e8;
+  --surface-1: #f7f6f0;
+  --surface-2: #ffffff;
+  --bg-accent: #e6f1fb;
+  --border: rgba(11,11,11,0.10);
+  --border-strong: rgba(11,11,11,0.18);
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --text-accent: #3987e5;
+    --text-success: #97c459;
+    --surface-0: #111110;
+    --surface-1: #1a1a19;
+    --surface-2: #222221;
+    --bg-accent: #042c53;
+    --border: rgba(255,255,255,0.10);
+    --border-strong: rgba(255,255,255,0.18);
+  }
+}
+body{font-family:var(--font-sans);background:var(--surface-0);color:var(--text-primary);min-height:100vh}
+.page{max-width:720px;margin:0 auto;background:var(--surface-2);border-left:0.5px solid var(--border);border-right:0.5px solid var(--border);min-height:100vh}
+.hero{padding:2.5rem 2rem 1.5rem;border-bottom:0.5px solid var(--border)}
+.tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:20px;background:var(--bg-accent);color:var(--text-accent);margin-bottom:1rem}
+.hero h1{font-size:22px;font-weight:500;color:var(--text-primary);line-height:1.35;margin-bottom:.5rem}
+.hero p{font-size:14px;color:var(--text-secondary);max-width:580px;line-height:1.7}
+.stack{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+.pill{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--surface-1);border:0.5px solid var(--border);color:var(--text-secondary)}
+.section{padding:2rem 2rem 0}
+.section-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:1.25rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:2rem}
+.card{background:var(--surface-1);border-radius:var(--radius);padding:1rem;border:0.5px solid var(--border)}
+.card .label{font-size:12px;color:var(--text-secondary);margin-bottom:.35rem}
+.card .value{font-size:22px;font-weight:500;color:var(--text-primary)}
+.card .sub{font-size:12px;color:var(--text-muted);margin-top:.2rem}
+.divider{height:0.5px;background:var(--border);margin:0 2rem}
+.finding{background:var(--surface-1);border-radius:12px;border:0.5px solid var(--border);padding:1rem 1.25rem;margin-bottom:1.5rem}
+.finding .ftitle{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:.35rem}
+.finding .ftext{font-size:13px;color:var(--text-secondary);line-height:1.7}
+.probe-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 12px;align-items:center;margin-bottom:1.5rem}
+.probe-grid .gh{font-size:11px;color:var(--text-muted);font-weight:500;padding-bottom:4px}
+.probe-grid .gl{font-size:13px;color:var(--text-secondary)}
+.bar-wrap{background:var(--surface-0);border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-color{background:#2a78d6}
+.bar-identity{background:#1baf7a}
+.bar-val{font-size:12px;color:var(--text-primary);font-weight:500;min-width:38px;text-align:right}
+.chart-wrap{position:relative;width:100%;height:260px;margin-bottom:1.5rem}
+.legend{display:flex;gap:16px;margin-bottom:12px;font-size:12px;color:var(--text-secondary)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.final-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:2rem}
+.final-card{background:var(--surface-1);border-radius:12px;border:0.5px solid var(--border);padding:1rem 1.25rem}
+.final-card .fc-label{font-size:12px;color:var(--text-muted);margin-bottom:.5rem}
+.final-card .fc-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:0.5px solid var(--border)}
+.final-card .fc-row:last-child{border-bottom:none}
+.final-card .fc-name{font-size:13px;color:var(--text-secondary)}
+.final-card .fc-val{font-size:13px;font-weight:500;color:var(--text-primary)}
+.fc-val.good{color:var(--text-success)}
+.footer{padding:1.5rem 2rem;border-top:0.5px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+.footer a{font-size:13px;color:var(--text-accent);text-decoration:none;display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="tag">Computer Vision · Person Re-ID</div>
+  <h1>Diagnosing and repairing shortcut learning<br>in person re-identification</h1>
+  <p>A six-phase mechanistic audit of a ResNet50 re-ID baseline trained on Market-1501. Diagnoses clothing color as a primary shortcut, quantifies its severity, and repairs it — recovering full accuracy while nearly doubling robustness.</p>
+  <div class="stack">
+    <span class="pill">Python</span>
+    <span class="pill">PyTorch</span>
+    <span class="pill">torchreid</span>
+    <span class="pill">OpenCV</span>
+    <span class="pill">Market-1501</span>
+    <span class="pill">ResNet50</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Phase 1 — Baseline</div>
+  <div class="cards">
+    <div class="card"><div class="label">mAP</div><div class="value">65.3%</div><div class="sub">Market-1501</div></div>
+    <div class="card"><div class="label">Rank-1</div><div class="value">82.8%</div></div>
+    <div class="card"><div class="label">Rank-5</div><div class="value">93.0%</div></div>
+    <div class="card"><div class="label">Epochs</div><div class="value">60</div><div class="sub">Triplet + softmax</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Phase 2 — What the model actually learned</div>
+  <div class="probe-grid">
+    <span class="gh">Layer</span><span class="gh">Color accuracy</span><span class="gh">Identity accuracy</span>
+    <span class="gl">layer1</span>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-color" style="width:90.4%"></div></div><span class="bar-val">90.4%</span></div></div>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-identity" style="width:7.1%"></div></div><span class="bar-val">7.1%</span></div></div>
+    <span class="gl">layer2</span>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-color" style="width:91.5%"></div></div><span class="bar-val">91.5%</span></div></div>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-identity" style="width:10.1%"></div></div><span class="bar-val">10.1%</span></div></div>
+    <span class="gl">layer3</span>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-color" style="width:92.7%"></div></div><span class="bar-val">92.7%</span></div></div>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-identity" style="width:17.9%"></div></div><span class="bar-val">17.9%</span></div></div>
+    <span class="gl">layer4</span>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-color" style="width:92.9%"></div></div><span class="bar-val">92.9%</span></div></div>
+    <div><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap" style="flex:1"><div class="bar-fill bar-identity" style="width:100%"></div></div><span class="bar-val">100%</span></div></div>
+  </div>
+  <div class="finding">
+    <div class="ftitle">Finding</div>
+    <div class="ftext">A linear probe achieves 92.9% clothing color accuracy on the final embedding — the same representation used for person matching. Color is a primary, linearly separable feature throughout the network, consistent with shortcut learning.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Phase 4 — What happens when clothing changes color</div>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#e34948"></span>Baseline</span>
+    <span><span class="legend-dot" style="background:#2a78d6"></span>Repaired</span>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="stressChart" role="img" aria-label="Line chart showing mAP under hue shift for baseline vs repaired model">Baseline drops from 65.3% to 23.1% at 90 degrees. Repaired model stays at 44.7%.</canvas>
+  </div>
+  <div class="finding">
+    <div class="ftitle">Finding — the cliff vs the slope</div>
+    <div class="ftext">The baseline collapses from 65.3% to 23.1% mAP at 90° hue shift — a 42 point drop. The repaired model degrades from 65.5% to 44.7% — a flatter curve. In deployment, graceful degradation is the difference between a usable system and a broken one.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Phase 5 — Repair results</div>
+  <div class="final-grid">
+    <div class="final-card">
+      <div class="fc-label">Standard evaluation (no shift)</div>
+      <div class="fc-row"><span class="fc-name">Baseline mAP</span><span class="fc-val">65.3%</span></div>
+      <div class="fc-row"><span class="fc-name">Repaired mAP</span><span class="fc-val">65.5%</span></div>
+      <div class="fc-row"><span class="fc-name">Change</span><span class="fc-val good">+0.2%</span></div>
+    </div>
+    <div class="final-card">
+      <div class="fc-label">Under 90° hue shift</div>
+      <div class="fc-row"><span class="fc-name">Baseline mAP</span><span class="fc-val">23.1%</span></div>
+      <div class="fc-row"><span class="fc-name">Repaired mAP</span><span class="fc-val">44.7%</span></div>
+      <div class="fc-row"><span class="fc-name">Change</span><span class="fc-val good">+21.6%</span></div>
+    </div>
+  </div>
+  <div class="finding">
+    <div class="ftitle">Key insight — you cannot fine-tune away a deep shortcut</div>
+    <div class="ftext">Fine-tuning from a shortcut-heavy checkpoint with mild augmentation (±30°) failed entirely — the shortcut was too deeply encoded to overwrite. Training from scratch with strong color augmentation (±90°) matched baseline accuracy while nearly doubling robustness. The shortcut must be prevented, not corrected.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="https://github.com/isaacmutuma/reid-shortcut-audit" target="_blank">
+    <i class="ti ti-brand-github"></i> GitHub repo
+  </a>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const ctx = document.getElementById('stressChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Standard (0°)', '30° shift', '90° shift', '180° shift'],
+    datasets: [
+      {
+        label: 'Baseline',
+        data: [65.3, 32.8, 23.1, 49.2],
+        borderColor: '#e34948',
+        backgroundColor: 'rgba(227,73,72,0.08)',
+        borderWidth: 2,
+        pointRadius: 5,
+        pointBackgroundColor: '#e34948',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        tension: 0.3,
+        fill: true
+      },
+      {
+        label: 'Repaired',
+        data: [65.5, 57.3, 44.7, 57.2],
+        borderColor: '#2a78d6',
+        backgroundColor: 'rgba(42,120,214,0.08)',
+        borderWidth: 2,
+        pointRadius: 5,
+        pointBackgroundColor: '#2a78d6',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        tension: 0.3,
+        fill: true
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '% mAP'
+        }
+      }
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 80,
+        ticks: { callback: v => v + '%', color: '#898781', font: { size: 12 } },
+        grid: { color: 'rgba(120,120,110,0.12)' },
+        border: { display: false }
+      },
+      x: {
+        ticks: { color: '#898781', font: { size: 12 }, autoSkip: false },
+        grid: { display: false },
+        border: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
