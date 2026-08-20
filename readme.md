@@ -62,4 +62,23 @@ produces a cleaner causal signal
 
 **Finding:** Color acts as distributed noise across all network layers. 
 Removing color-predictive channels improves accuracy consistently 
-regardless of intervention depth or size.
+regardless of intervention depth or size.The model adapted to using the remaining 1998 channels for matching — which happened to be slightly better at encoding actual identity features. Hence the small improvement.
+
+## Phase 4 — Stress Test Results
+
+| Hue Shift | mAP   | Rank-1 | mAP Drop | Rank-1 Drop |
+|-----------|-------|--------|----------|-------------|
+| Baseline  | 65.3% | 82.8%  | —        | —           |
+| 30°       | 32.8% | 40.9%  | -32.5%   | -41.9%      |
+| 90°       | 23.1% | 27.9%  | -42.2%   | -54.9%      |
+| 180°      | 49.2% | 62.7%  | -16.1%   | -20.1%      |
+
+**Finding:** Model accuracy collapses under clothing color change,
+with worst-case degradation at 90° hue shift (maximum color distance
+from training distribution). The 180° recovery confirms the shortcut
+is tied to specific hue values seen during training, not just
+sensitivity to color change in general.
+
+
+## Summary of the Phase 1 through Phase 4
+When color information is removed symmetrically, the model adapts and slightly improves. When color consistency is broken asymmetrically, the model catastrophically fails — revealing that it over-relies on color as a matching signal rather than learning robust identity features
