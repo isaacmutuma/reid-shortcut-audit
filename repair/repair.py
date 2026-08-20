@@ -86,7 +86,7 @@ datamanager = ImageDataManager(
     use_gpu=True
 )
 # inject AFTER instantiation
-datamanager.transform_tr.transforms.insert(-2, TorsoColorJitter(max_hue_shift=30))
+datamanager.transform_tr.transforms.insert(-2, TorsoColorJitter(max_hue_shift=90))
 print("TorsoColorJitter injected into training pipeline")
 
 model = build_model(
@@ -100,12 +100,6 @@ model = build_model(
 # model to device
 device=torch.device(config.DEVICE)
 model=model.to(device)
-
-#load the checkpoint
-checkpoint=torch.load(config.CHECKPOINT_PATH,map_location=device,weights_only=False)
-# EXtract only the layer weights dictionary ignoring the 'optimizer', 'scheduler', 'epoch', 'rank1'
-model.load_state_dict(checkpoint['state_dict'])
-
 
 
 #optimizer 
