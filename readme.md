@@ -1,8 +1,136 @@
-# Diagnosing and Repairing Shortcut Learning in Person Re-Identification Models for Robotic Perception
+# Diagnosing and Repairing Shortcut Learning in Re-Identification Models 
 
-While building a person-tracking system at IDOLL Robotics, a companion robot startup, I noticed the model's matching accuracy collapsed when subjects changed clothes between camera views. Investigating why led to this project — a full mechanistic audit of what the model had actually learned. The answer: it was tracking shirts, not people.
+## Overview
 
-The fix generalizes far beyond robotics. The same shortcut problem appears in any re-ID system deployed where appearance is inconsistent — and nowhere is that more critical than wildlife monitoring. Large conservation parks across Africa need autonomous systems that can track individual animals across days, seasons, and terrain. An animal's coat doesn't change, but lighting does — dramatically. A model that shortcuts on color temperature or shadow pattern will fail in the field the same way this one fails under a hue shift. Building re-ID systems that track identity, not appearance artifacts, is the foundation that makes that possible.
+Person Re-Identification (Re-ID) systems are typically evaluated by how accurately
+they retrieve the correct identity from a gallery. However, high retrieval
+performance does not necessarily mean that a model has learned identity-relevant
+features.
+
+A model may instead exploit spurious correlations that are predictive within a
+dataset but fail under distribution shift.
+
+This project investigates this problem through a systematic audit of deep
+Re-ID representations. Rather than treating the model as a black box, I examine
+whether its embedding contains information corresponding to potentially
+shortcut features, test the causal importance of those features through
+controlled perturbations, and evaluate whether targeted interventions improve
+robustness.
+
+The current study uses person Re-ID and clothing color as a controlled test case.
+The broader objective is to develop methods for identifying and mitigating
+shortcut reliance in visual Re-ID systems operating in unconstrained
+environments.
+
+## Research Question
+
+> Does strong Re-ID performance necessarily indicate that a model has learned
+> identity-relevant representations, or can performance be driven by
+> dataset-specific shortcuts?
+
+A secondary question is:
+
+> Can representation probing and targeted interventions reveal and reduce
+> reliance on these shortcuts?
+
+## Approach
+
+The audit consists of four stages:
+
+1. **Baseline Re-ID**
+   - Train a Re-ID model using Torchreid.
+   - Establish baseline mAP and Rank-1 performance.
+
+2. **Representation probing**
+   - Extract the learned embeddings.
+   - Train lightweight probes to determine whether specific visual attributes
+     remain encoded in the representation.
+
+3. **Controlled intervention**
+   - Perturb the suspected shortcut while preserving identity as much as possible.
+   - Measure the resulting degradation in retrieval performance.
+
+4. **Robustness intervention**
+   - Modify training to reduce reliance on the identified shortcut.
+   - Evaluate whether robustness improves under the same perturbation.
+
+## Current Case Study: Clothing Color
+
+Market-1501 provides a controlled environment for studying shortcut reliance.
+The current audit investigates whether clothing color becomes disproportionately
+encoded in the learned Re-ID representation.
+
+A linear probe achieves **92.9% clothing-color classification accuracy** from
+the learned embedding, providing evidence that color information is strongly
+represented.
+
+A controlled hue transformation is then used to test whether this information
+is merely present or actually contributes to retrieval performance.
+
+Baseline performance:
+
+- mAP: **65.3%**
+- Rank-1: **82.8%**
+
+Under the hue perturbation:
+
+- mAP: **23.1%**
+
+After the proposed intervention:
+
+- mAP: **44.7%**
+
+These results suggest that shortcut features can be both measurable in the
+representation and consequential for Re-ID performance under distribution
+shift.
+
+## Why This Matters
+
+Re-ID systems deployed outside controlled benchmark environments may encounter
+changes in:
+
+- camera characteristics
+- lighting
+- background
+- viewpoint
+- image quality
+- appearance
+- season
+- geography
+- environmental conditions
+
+A model that relies on dataset-specific correlations can therefore perform well
+on a benchmark while failing when those correlations change.
+
+This motivates evaluating Re-ID systems not only by conventional retrieval
+metrics, but also by **what information their representations encode and how
+they respond when potentially shortcut features are altered**.
+
+## Future Research
+
+This project establishes a methodology for auditing shortcut reliance in Re-ID
+representations. Future work will investigate whether the same phenomena occur
+in more challenging real-world settings, including:
+
+- cross-camera Re-ID
+- limited-data environments
+- environmental and geographic distribution shifts
+- wildlife Re-ID
+- individual animal tracking
+- resource-constrained deployment
+
+A particular direction of interest is applying shortcut auditing to wildlife
+Re-ID in large, unconstrained environments, where models may learn correlations
+between animal identity and camera, location, background, season, or other
+environmental factors.
+
+The long-term goal is to develop **robust and resource-efficient Re-ID systems
+that identify individuals rather than the circumstances in which they were
+observed.**
+
+## Repository
+
+...
 
 A six-phase mechanistic audit of shortcut learning in a standard ResNet50 re-ID baseline trained on Market-1501.
 The project diagnoses color as a primary shortcut feature, quantifies its severity, and repairs it through targeted augmentation.
